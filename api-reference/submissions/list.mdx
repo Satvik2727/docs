@@ -1,0 +1,57 @@
+---
+title: List Submissions
+api: GET /submissions
+description: Get submissions for a form
+---
+
+Retrieve submissions for a specific form. You can filter by completion status to view either fully submitted forms or partial, in-progress responses.
+
+<ParamField query="form_id" type="string" required>
+  The form UUID
+</ParamField>
+
+<ParamField query="limit" type="number" default="50">
+  Max submissions to return (max 200)
+</ParamField>
+
+<ParamField query="status" type="string">
+  Filter by status: `completed` or `partial`
+</ParamField>
+
+<RequestExample>
+```bash cURL
+curl --request GET \
+  --url 'https://quipform.com/api/v1/submissions?form_id=abc123&limit=50&status=completed' \
+  --header 'Authorization: Bearer <token>'
+```
+
+```javascript Node.js
+fetch('https://quipform.com/api/v1/submissions?form_id=abc123&limit=50&status=completed', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer <token>'
+  }
+})
+  .then(response => response.json())
+  .then(response => console.log(response))
+  .catch(err => console.error(err));
+```
+</RequestExample>
+
+<ResponseExample>
+```json
+{
+  "form_id": "abc123",
+  "form_title": "Contact Form",
+  "submissions": [
+    {
+      "id": "sub1",
+      "answers": { "f1": "John", "f2": "john@example.com" },
+      "is_partial": false,
+      "submitted_at": "2026-06-01T12:00:00Z"
+    }
+  ],
+  "count": 1
+}
+```
+</ResponseExample>

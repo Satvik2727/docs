@@ -1,20 +1,40 @@
 ---
-title: "Introduction"
-description: "Welcome to your project"
+title: Introduction
+description: Fundamental concepts of the QuipForm API.
 ---
 
-Write a short description of your product here. What it does, who it's for, and what they can accomplish with it.
+QuipForm provides a full REST API and MCP server to create forms, fetch submissions, and connect AI assistants. Our API follows REST principles and is accessible only via HTTPS. For security reasons, unencrypted HTTP requests are not allowed.
 
-<Tip>
-  Ready to make this your own? Start by editing this page. Update your `docs.json` file to customize your site. Then fill out the [Quickstart](/quickstart) page.
-</Tip>
+## Base URL
 
-<Card title="Quickstart" icon="rocket" href="/quickstart">
-  This card links to the quickstart page in your project.
+The Base URL for all API endpoints is:
+
+```bash
+https://quipform.com/api/v1
+```
+
+## Authentication
+
+Authentication to the QuipForm API requires an `Authorization` header with a Bearer token. Include the `Authorization` header in your requests as shown below:
+
+```bash
+Authorization: Bearer <token>
+```
+
+<Card title="Authentication Guide" icon="lock" href="/authentication">
+  Learn more about how to get your API key.
 </Card>
-<Card title="Components" icon="puzzle-piece" href="https://mintlify.com/docs/components">
-  Add cards, callouts, steps, tabs, and more to design and structure your pages.
-</Card>
-<Card title="Settings" icon="gear" href="https://mintlify.com/docs/organize/settings">
-  Set your site name, branding, and navigation in the `docs.json` file.
-</Card>
+
+## Response codes
+
+The API returns standard HTTP response codes to indicate the success or failure of an API request. Here are a few examples:
+
+| Code | Description |
+| ---- | ----------- |
+| **200** | **Success** - The request completed successfully |
+| **400** | **Bad Request** - The request was malformed or contained invalid parameters |
+| **401** | **Unauthorized** - Authentication credentials are missing or invalid |
+| **403** | **Forbidden** - You don't have permission to access this resource |
+| **404** | **Not Found** - The requested resource doesn't exist |
+| **429** | **Rate Limited** - You've exceeded the allowed number of requests |
+| **500** | **Server Error** - Something went wrong on our end |

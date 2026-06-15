@@ -1,0 +1,166 @@
+---
+title: Authentication
+description: How to authenticate your QuipForm API and MCP requests
+---
+
+All QuipForm API and MCP requests require authentication. 
+
+QuipForm supports two methods of authentication:
+* **API Keys**
+* **OAuth** (for future integrations and MCP clients)
+
+For V1, **API Keys** are the primary authentication method.
+
+---
+
+## API Keys
+
+You can generate and manage your API keys from your QuipForm dashboard under **Developer → API Keys**.
+
+From the dashboard, you can:
+* **Create API Key**: Generate a new key for a specific application or environment.
+* **Copy API Key**: Copy the key to your clipboard immediately after creation.
+* **Revoke API Key**: Disable a key if it is compromised or no longer needed.
+
+<Warning>
+  Your API keys are shown only once upon creation. QuipForm stores only a hashed version of your keys. If you lose a key, it must be revoked and regenerated.
+</Warning>
+
+---
+
+## Usage
+
+Authenticate your requests by including the `Authorization` header with your Bearer token.
+
+**Example:**
+```bash
+Authorization: Bearer qf_xxxxxxxxxxxxxxxxx
+```
+
+### Examples
+
+<CodeGroup>
+```bash cURL
+curl https://quipform.com/api/v1/forms \
+  -H "Authorization: Bearer qf_live_your_key_here"
+```
+
+```javascript JavaScript
+fetch('https://quipform.com/api/v1/forms', {
+  headers: {
+    'Authorization': 'Bearer qf_live_your_key_here'
+  }
+});
+```
+
+```python Python
+import requests
+
+headers = {
+    'Authorization': 'Bearer qf_live_your_key_here'
+}
+response = requests.get('https://quipform.com/api/v1/forms', headers=headers)
+```
+</CodeGroup>
+
+<Note>
+  HTTPS is strictly required for all API requests. Any requests without valid authentication or sent over plain HTTP will return a `401 Unauthorized` error.
+</Note>
+
+---
+
+## Key Format
+
+All QuipForm API keys follow a specific format.
+
+**Example:**
+```text
+qf_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+```
+
+* **Prefix**: The `qf_` prefix identifies the string as a QuipForm API key.
+* **Uniqueness**: Keys are unique per user and workspace.
+* **Multiple Keys**: Multiple keys may be created for different environments (e.g., development, production).
+* **Independent Revocation**: Keys can be revoked independently without affecting other active keys.
+
+---
+
+## Security Best Practices
+
+To keep your account and data secure, follow these best practices:
+* **Never expose API keys in frontend code** (e.g., browser-side JavaScript).
+* **Never commit keys to GitHub** or any other version control system.
+* **Store keys in environment variables** or a secure secret manager.
+* **Rotate keys** immediately if you suspect they have been compromised.
+* **Revoke unused keys** to minimize potential attack surfaces.
+
+---
+
+## MCP Authentication
+
+The QuipForm Model Context Protocol (MCP) server utilizes the exact same API keys as the REST API. 
+
+**Example:**
+```json
+"env": {
+  "QUIPFORM_API_KEY": "qf_xxxxxxxxxxxxxxxxx"
+}
+```
+
+*Future OAuth support is planned for seamless integration with AI assistants like Claude and Cursor without manual API key configuration.*
+
+---
+
+## Error Responses
+
+If an API request fails due to authentication issues, QuipForm will return a `401 Unauthorized` HTTP status code.
+
+Common reasons include:
+* **Invalid API key**: The provided key does not exist or was typed incorrectly.
+* **Missing Authorization header**: No token was included in the request headers.
+* **Revoked API key**: The key being used has been revoked from the dashboard.
+
+**Example Error Response:**
+```json
+{
+  "error": {
+    "code": "unauthorized",
+    "message": "Invalid API key provided. Check your dashboard."
+  }
+}
+```
+
+---
+
+## Environment Variables
+
+We recommend storing your API key in an environment variable, typically named `QUIPFORM_API_KEY`.
+
+```bash
+QUIPFORM_API_KEY=qf_xxxxxxxxxxxxxxxxx
+```
+
+### Usage Examples
+
+<CodeGroup>
+```javascript Node.js
+const apiKey = process.env.QUIPFORM_API_KEY;
+
+fetch('https://quipform.com/api/v1/forms', {
+  headers: {
+    'Authorization': `Bearer ${apiKey}`
+  }
+});
+```
+
+```python Python
+import os
+import requests
+
+api_key = os.getenv('QUIPFORM_API_KEY')
+headers = {
+    'Authorization': f'Bearer {api_key}'
+}
+response = requests.get('https://quipform.com/api/v1/forms', headers=headers)
+```
+</CodeGroup>

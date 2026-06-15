@@ -1,0 +1,49 @@
+---
+title: Update Form
+api: PATCH /forms/{id}
+description: Update a form's title
+---
+
+Update the settings or metadata of an existing form. Currently, this endpoint supports updating the form's title. Additional fields will be supported in future releases.
+
+<ParamField path="id" type="string" required>
+  The form UUID
+</ParamField>
+
+<ParamField body="title" type="string">
+  New form title
+</ParamField>
+
+<RequestExample>
+```bash cURL
+curl --request PATCH \
+  --url https://quipform.com/api/v1/forms/abc123 \
+  --header 'Authorization: Bearer <token>' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "title": "Updated Contact Form"
+  }'
+```
+
+```javascript Node.js
+fetch('https://quipform.com/api/v1/forms/abc123', {
+  method: 'PATCH',
+  headers: {
+    'Authorization': 'Bearer <token>',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    title: 'Updated Contact Form'
+  })
+})
+  .then(response => response.json())
+  .then(response => console.log(response))
+  .catch(err => console.error(err));
+```
+</RequestExample>
+
+<ResponseExample>
+```json
+{ "ok": true, "id": "abc123" }
+```
+</ResponseExample>

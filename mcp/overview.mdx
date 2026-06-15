@@ -1,0 +1,54 @@
+---
+title: MCP Server
+description: Connect AI assistants to QuipForm
+---
+
+QuipForm has a built-in MCP (Model Context Protocol) server. Connect Claude Desktop,
+Cursor, or any MCP-compatible assistant to create forms and fetch submissions using
+natural language.
+
+## MCP URL
+https://quipform.com/api/mcp
+
+## Available Tools
+
+Here is the complete list of operations our QuipForm MCP server can currently perform on behalf of an LLM or AI agent:
+
+| Tool | Description |
+|------|-------------|
+| `forms.create` | Generate a complete, functional form from a natural language prompt. You can also pass in custom hex colors and fonts to style it. |
+| `forms.update` | Modify an existing form by updating its title or changing its theme colors. |
+| `forms.list` | Retrieve a paginated list of all the user's forms. |
+| `forms.get` | Inspect a specific form (by its ID or public URL) to see its schema and what fields it contains. |
+| `forms.delete` | Permanently delete a form and all its data. |
+| `submissions.list` | Fetch a paginated list of submissions for a given form. You can filter by whether the submission is `completed` or `partial`. |
+| `submissions.get` | Retrieve the full, raw data (answers, metadata, timestamps) for one specific submission. |
+| `webhooks.list` | View all external webhook URLs currently subscribed to a form. |
+| `webhooks.create` | Programmatically attach a new webhook URL (e.g., Slack, Discord, Zapier) to a form so it receives new submissions instantly. |
+| `webhooks.delete` | Remove a webhook integration from a form. |
+
+Because of these tools, an AI agent connected to QuipForm can essentially act as an automated Form Builder *and* a Backend Manager simultaneously!
+
+## Claude Desktop Setup
+
+Add this to `~/.claude/claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "quipform": {
+      "command": "npx",
+      "args": ["-y", "@quipform/mcp-server"],
+      "env": {
+        "QUIPFORM_API_KEY": "qf_live_your_key_here"
+      }
+    }
+  }
+}
+```
+
+## Example prompts
+
+- *"Create a registration form with Name, Email, Phone, and Company"*
+- *"List my forms"*
+- *"Show me the last 10 submissions for my Contact Form"*
